@@ -4,7 +4,7 @@ xcode-select --install
 # Install Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Install Homebrew formulae (run from repo root: cd /path/to/mac-setup first)
+# Install Homebrew formulae (run from repo root: cd /path/to/mac-101 first)
 xargs brew install < brew-formulae.txt
 
 # Install Homebrew casks (run from repo root)

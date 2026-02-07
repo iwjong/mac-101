@@ -1,7 +1,7 @@
 {
-  "name": "mac-setup",
+  "name": "mac-101",
   "version": "1.0.0",
-  "description": "Mac setup: apps, tools, and settings",
+  "description": "Mac 101: setup, optimization, and maintenance guide",
   "private": true,
   "scripts": {
     "toc": "doctoc README.md --github",

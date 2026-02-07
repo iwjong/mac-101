@@ -1,6 +1,7 @@
-## Mac Setup
+## Mac 101
 
-This repo contains info on all the apps, tools, and settings I use on my Mac. All content is in English.
+A single reference for setting up, optimizing, and maintaining a Mac. Covers apps, tools, settings, disk cleanup, performance, and recovery. All content is in English.  
+*(Repo name: mac-101.)*
 
 **Quick start:** After installing [Homebrew](https://brew.sh/), from this repo root run:
 - `xargs brew install < brew-formulae.txt` for CLI tools
@@ -37,6 +38,33 @@ Or run `./setup.sh` for a full automated setup (Xcode CLI tools, Homebrew, formu
   - [Global Modules](#global-modules)
 - [VS Code](#vs-code)
 - [Break Timer](#break-timer)
+- [Disk Cleanup & Storage](#disk-cleanup--storage)
+  - [Built-in Storage Management](#built-in-storage-management)
+  - [Safe Cache & Log Cleanup](#safe-cache--log-cleanup)
+  - [Downloads & Temporary Files](#downloads--temporary-files)
+  - [Quick Storage Commands](#quick-storage-commands)
+  - [iCloud & Time Machine](#icloud--time-machine)
+- [Performance & Optimization](#performance--optimization)
+  - [Login Items](#login-items)
+  - [Activity Monitor](#activity-monitor)
+  - [Reduce Visual Effects](#reduce-visual-effects)
+  - [Battery & Energy (MacBooks)](#battery--energy-macbooks)
+  - [Dock & Spotlight](#dock--spotlight)
+  - [DNS & Network Cache](#dns--network-cache)
+- [Maintenance & Troubleshooting](#maintenance--troubleshooting)
+  - [Safe Maintenance Commands](#safe-maintenance-commands)
+  - [Rebuild Spotlight Index](#rebuild-spotlight-index)
+  - [Rebuild Launch Services (fix “Open With” and app associations)](#rebuild-launch-services-fix-open-with-and-app-associations)
+  - [Disk First Aid](#disk-first-aid)
+  - [Recommended Tools (many via Homebrew)](#recommended-tools-many-via-homebrew)
+  - [Maintenance Schedule (suggested)](#maintenance-schedule-suggested)
+- [Recovery & Reset](#recovery--reset)
+  - [Recovery Mode](#recovery-mode)
+  - [Internet Recovery](#internet-recovery)
+  - [Safe Mode](#safe-mode)
+  - [SMC Reset (power / thermal issues)](#smc-reset-power--thermal-issues)
+  - [NVRAM/PRAM Reset (Intel Macs)](#nvrampram-reset-intel-macs)
+  - [Target Disk Mode (Intel Macs)](#target-disk-mode-intel-macs)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -430,3 +458,205 @@ I have it setup to show:
 * 5 minute long break every 60 minutes
 
 There is also a cross platform break timer call [Stretchly](https://hovancik.net/stretchly/). I have not used it but a lot of people have recommended it.
+
+---
+
+## Disk Cleanup & Storage
+
+### Built-in Storage Management
+
+**Apple menu → About This Mac → Storage → Manage…**
+
+- Enable **Store in iCloud** for photos and files you don’t need locally.
+- Turn on **Empty Trash Automatically**.
+- Use **Review Large Files** and **Reduce Clutter** to free space.
+
+### Safe Cache & Log Cleanup
+
+Only clear **user** caches and logs. Avoid deleting system caches on a Mac with SIP enabled; the system can become unstable.
+
+```bash
+# User cache (safe; apps will recreate as needed)
+rm -rf ~/Library/Caches/*
+
+# User logs
+rm -rf ~/Library/Logs/*
+
+# Optional: browser caches only
+rm -rf ~/Library/Caches/com.apple.Safari/WebKit*
+rm -rf ~/Library/Caches/com.google.Chrome/*
+rm -rf ~/Library/Caches/org.mozilla.firefox*
+```
+
+### Downloads & Temporary Files
+
+```bash
+# Remove files in Downloads older than 30 days (review first)
+find ~/Downloads -type f -mtime +30 -delete
+
+# Empty Trash from the command line
+osascript -e 'tell application "Finder" to empty the trash'
+```
+
+### Quick Storage Commands
+
+```bash
+# Disk usage by volume
+df -h
+
+# Size of folders in home directory
+du -sh ~/*
+```
+
+### iCloud & Time Machine
+
+- **Photos:** System Settings → [Your Name] → iCloud → Photos → **Optimize Mac Storage**.
+- **Time Machine:** Exclude large, disposable data to save backup space:
+  ```bash
+  sudo tmutil addexclusion ~/Downloads
+  sudo tmutil addexclusion ~/Library/Caches
+  ```
+
+---
+
+## Performance & Optimization
+
+### Login Items
+
+**System Settings → General → Login Items**
+
+- Remove apps you don’t need at startup.
+- Check **Open at Login** and allow/deny lists.
+
+### Activity Monitor
+
+**Applications → Utilities → Activity Monitor**
+
+- Watch **CPU**, **Memory** (pressure graph), and **Disk**.
+- Quit or restrict heavy apps if the Mac is slow.
+
+### Reduce Visual Effects
+
+**System Settings → Accessibility → Display**
+
+- **Reduce motion** and **Reduce transparency** can improve responsiveness on older or low-end Macs.
+
+### Battery & Energy (MacBooks)
+
+**System Settings → Battery (or Energy Saver on older macOS)**
+
+- Choose **Low Power Mode** or adjust display sleep to balance battery and performance.
+- **Battery → Options**: enable **Optimized battery charging** if you usually leave it plugged in.
+
+### Dock & Spotlight
+
+- **Dock:** System Settings → Dock & Menu Bar — turn off magnification; remove unused apps.
+- **Spotlight:** System Settings → Siri & Spotlight → Spotlight Privacy — exclude large or non-searchable folders to speed up indexing.
+
+### DNS & Network Cache
+
+If the network feels slow or broken:
+
+```bash
+sudo dscacheutil -flushcache
+sudo killall -HUP mDNSResponder
+```
+
+---
+
+## Maintenance & Troubleshooting
+
+### Safe Maintenance Commands
+
+```bash
+# Memory pressure: force purge of inactive memory (safe)
+sudo purge
+
+# View memory/swap (diagnostic only)
+vm_stat
+sysctl vm.swapusage
+```
+
+### Rebuild Spotlight Index
+
+If Spotlight is slow or missing results:
+
+```bash
+# Turn off indexing
+sudo mdutil -a -i off
+
+# Remove index (path may vary by macOS version)
+sudo rm -rf /.Spotlight-V100/*
+
+# Turn indexing back on (rebuilds index)
+sudo mdutil -a -i on
+```
+
+### Rebuild Launch Services (fix “Open With” and app associations)
+
+```bash
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+```
+
+### Disk First Aid
+
+**Applications → Utilities → Disk Utility**
+
+- Select the startup volume → **First Aid** → **Run**. Do not interrupt.
+
+### Recommended Tools (many via Homebrew)
+
+| Purpose              | Tool |
+|----------------------|------|
+| Disk usage           | [DaisyDisk](https://daisydiskapp.com/), [OmniDiskSweeper](https://www.omnigroup.com/more) |
+| Full app removal     | [AppCleaner](https://freemacsoft.net/appcleaner/) — `brew install --cask appcleaner` |
+| Archives             | [The Unarchiver](https://theunarchiver.com/) or [Keka](https://www.keka.io/) — `brew install --cask keka` |
+| Malware scan         | [Malwarebytes](https://www.malwarebytes.com/) (optional) |
+
+### Maintenance Schedule (suggested)
+
+- **Daily:** Empty Trash; close unused apps.
+- **Weekly:** Clear user caches; check Login Items; review large files.
+- **Monthly:** Run Disk First Aid; clean Downloads; check for macOS and app updates.
+- **Quarterly:** Review and remove unused apps; check Time Machine and backups.
+
+---
+
+## Recovery & Reset
+
+### Recovery Mode
+
+**Hold Command (⌘) + R** while powering on.
+
+- Reinstall macOS, restore from Time Machine, run Disk Utility, or open Terminal.
+
+### Internet Recovery
+
+**Hold Option + Command (⌘) + R** while powering on.
+
+- Downloads and runs the latest compatible macOS installer (needs internet).
+
+### Safe Mode
+
+**Hold Shift** while booting until the login window appears.
+
+- Use for troubleshooting startup issues and clearing some caches.
+
+### SMC Reset (power / thermal issues)
+
+- **Mac with Apple Silicon:** SMC is not user-resettable; restart or leave off for a minute.
+- **Intel MacBook:** Shut down, then hold **Shift + Control + Option** and press the power button once. Hold 10 seconds, release, then power on normally.
+- **Intel desktop Mac:** Unplug power for ~15 seconds, then plug back in and power on.
+
+### NVRAM/PRAM Reset (Intel Macs)
+
+**Hold Option + Command + P + R** while powering on. Release after the second chime (or after the Apple logo appears and disappears twice on newer Macs).
+
+### Target Disk Mode (Intel Macs)
+
+**Hold T** while powering on. Connect to another Mac via Thunderbolt/USB-C to access the disk.
+
+---
+
+**Safety:** Always back up important data before major cleanup or system changes. Prefer built-in tools and user-level cleanup; avoid deleting system files unless you know what they are.  
+*Last updated for current macOS (Sonoma/Sequoia) and Apple Silicon–aware usage.*
