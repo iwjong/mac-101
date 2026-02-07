@@ -1,12 +1,15 @@
 ## Mac Setup
 
-This repo contains info on all the apps / tools / settings I use on my Mac.
+This repo contains info on all the apps, tools, and settings I use on my Mac. All content is in English.
+
+**Quick start:** After installing [Homebrew](https://brew.sh/), from this repo root run:
+- `xargs brew install < brew-formulae.txt` for CLI tools
+- `xargs brew install --cask < brew-casks.txt` for GUI apps  
+Or run `./setup.sh` for a full automated setup (Xcode CLI tools, Homebrew, formulae, casks, nvm, git config).
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
-- [What Macbook do I have?](#what-macbook-do-i-have)
 - [Homebrew / Terminal / Shell](#homebrew--terminal--shell)
   - [Homebrew](#homebrew)
   - [Terminal](#terminal)
@@ -171,14 +174,12 @@ curl -O https://raw.githubusercontent.com/w3cj/dotfiles/master/.bash_profile
 
 #### Commands used by my .bash_profile
 
-* vcprompt - list the current branch if in a folder that is a git repo
-* [fortune](https://en.wikipedia.org/wiki/Fortune_(Unix)) - print a random quote / story / joke / poem.
-* [cowsay](https://en.wikipedia.org/wiki/Cowsay) - use a cowfile to say a random fortune
+* vcprompt - show the current branch when in a git repo (upstream is unmaintained; still available via `brew install vcprompt`)
+* [fortune](https://en.wikipedia.org/wiki/Fortune_(Unix)) - print a random quote, story, joke, or poem
+* [cowsay](https://en.wikipedia.org/wiki/Cowsay) - display a fortune with a cow (or other character)
 
 ```sh
-brew install vcprompt
-brew install fortune
-brew install cowsay
+brew install vcprompt fortune cowsay
 ```
 
 #### Install the latest version of git
@@ -254,45 +255,26 @@ brew install alfred
 
 ## Other Apps I Use Daily
 
-* [firefox-developer-edition](https://www.mozilla.org/en-US/firefox/developer/) - Preferred web browser
-* [app-cleaner](https://freemacsoft.net/appcleaner/) - When removing an app, will search your file system for related files / settings that should be removed as well
-* android-file-transfer - Transfer files to / from my android phone
-* android-platform-tools - Installs `adb` without the need for the full android studio.
-* [keepingyouawake](https://keepingyouawake.app/) - Prevents my Mac from going to sleep when I'm presenting / live streaming
-* [discord](https://discord.com/) - Messaging / Community
-* [vlc](https://www.videolan.org/) - I use VLC to watch videos instead of the built in QuickTime.
-* [keka](https://www.keka.io/en/) - Can extract 7z / rar and other types of archives
-* [kap](https://getkap.co/) - Screen recorder / gif maker
+* [firefox@developer-edition](https://www.mozilla.org/en-US/firefox/developer/) - Preferred web browser (Homebrew cask: `firefox@developer-edition`)
+* [appcleaner](https://freemacsoft.net/appcleaner/) - When removing an app, searches the file system for related files and settings to remove
+* android-file-transfer - Transfer files to/from an Android phone
+* android-platform-tools - Installs `adb` without the full Android Studio
+* [keepingyouawake](https://keepingyouawake.app/) - Prevents the Mac from sleeping when presenting or live streaming
+* [discord](https://discord.com/) - Messaging / community
+* [vlc](https://www.videolan.org/) - Video playback (alternative to QuickTime)
+* [keka](https://www.keka.io/en/) - Extract 7z, RAR, and other archives
+* [kap](https://getkap.co/) - Screen recorder / GIF maker
 * [time-out](https://www.dejal.com/timeout/) - Break timer
 * [gimp](https://www.gimp.org/) - Image editor
 * [inkscape](https://inkscape.org/) - Vector editor
-* [visual-studio-code](https://code.visualstudio.com/) - Code Editor
+* [visual-studio-code](https://code.visualstudio.com/) - Code editor
 * [sublime-text](https://www.sublimetext.com/) - Note taking (I know there are better apps...)
-* [insomnia](https://insomnia.rest/products/insomnia) - HTTP / REST / GraphQL tester / requester
+* [insomnia](https://insomnia.rest/products/insomnia) - HTTP / REST / GraphQL client
 
-You can install them in one go by placing them all into a text file and then running brew install:
-
-```
-firefox-developer-edition
-app-cleaner
-android-file-transfer
-android-platform-tools
-keepingyouawake
-discord
-slack
-vlc
-keka
-kap
-time-out
-gimp
-inkscape
-visual-studio-code
-sublime-text
-insomnia
-```
+You can install them in one go by placing the cask names into a text file and running (see `brew-casks.txt` in this repo):
 
 ```sh
-xargs brew install < apps.txt
+xargs brew install --cask < brew-casks.txt
 ```
 
 ## OS Settings
@@ -318,9 +300,9 @@ These are my preferred settings for `Finder` and the `Dock`.
 
 I don't use the Dock at all. It takes up screen space, and I can use Alfred to launch apps and AltTab to switch between apps. I make the dock as small as possible and auto hide it.
 
-* System Preferences
+* System Settings (or System Preferences on older macOS)
   * Dock & Menu Bar
-      * Size -> Small as possible
+      * Size -> As small as possible
       * Position on screen -> Right
       * Automatically hide and show the Dock -> Yes
 
@@ -346,9 +328,9 @@ I like to have a calendar in the menu bar that I can quickly look at. stats does
 brew install itsycal
 ```
 
-itsycal shows the date, so I hide the date in the system menu bar widget:
+itsycal shows the date, so I hide the date in the system menu bar clock:
 
-* System Preferences
+* System Settings (or System Preferences on older macOS)
   * Dock & Menu Bar
       * Clock
           * Show Date -> Never
@@ -383,10 +365,10 @@ I use nvm to manage the installed versions of Node.js on my machine. This allows
 
 See installation instructions [here](https://github.com/nvm-sh/nvm#installing-and-updating).
 
-OR run this command (make sure v0.39.1 is still the latest)
+OR run this command (see [nvm releases](https://github.com/nvm-sh/nvm/releases) for the latest version):
 
 ```sh
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
 ```
 
 After installation you'll want to add the following to your .bash_profile / .zshrc etc.
@@ -396,11 +378,11 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" ## This loads nvm
 ```
 
-Now that nvm is installed, you can install a specific version of node.js and use it:
+Now that nvm is installed, you can install a specific version of Node.js and use it (e.g. LTS or latest):
 
 ```sh
-nvm install 18
-nvm use 18
+nvm install --lts
+nvm use --lts
 node --version
 ```
 
@@ -448,4 +430,3 @@ I have it setup to show:
 * 5 minute long break every 60 minutes
 
 There is also a cross platform break timer call [Stretchly](https://hovancik.net/stretchly/). I have not used it but a lot of people have recommended it.
-

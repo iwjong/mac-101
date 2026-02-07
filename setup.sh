@@ -1,44 +1,36 @@
-# install xcode build tools
-
+# Install Xcode Command Line Tools (required for Homebrew and many dev tools)
 xcode-select --install
 
-# install homebrew
-
+# Install Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# install homebrew formulae
+# Install Homebrew formulae (run from repo root: cd /path/to/mac-setup first)
+xargs brew install < brew-formulae.txt
 
-# install homebrew casks
+# Install Homebrew casks (run from repo root)
+xargs brew install --cask < brew-casks.txt
 
-# setup bash_profile and other dot files
-
+# Setup bash_profile and other dotfiles
 cd ~
-
 curl -O https://raw.githubusercontent.com/w3cj/dotfiles/master/.bash_profile
+curl -o .gitignore https://raw.githubusercontent.com/w3cj/dotfiles/master/.gitignore
 
-curl -O https://github.com/w3cj/dotfiles/blob/master/.gitignore
-
-# configure git
-
-git config --global user.name w3cj
-
-git config --global user.email cj@null.computer
-
+# Configure git (replace with your name and email)
+git config --global user.name "w3cj"
+git config --global user.email "cj@null.computer"
 git config --global core.editor nano
 
-# install node version manager
+# Install Node Version Manager (nvm) - see https://github.com/nvm-sh/nvm/releases for latest
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
+# Then add to your .bash_profile / .zshrc:
+#   export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+#   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/HEAD/install.sh | bash
-
-nvm install lts
+# After opening a new terminal:
+nvm install --lts
 nvm install latest
-
-# global npm installs
-
 nvm use latest
 npm install -g lite-server gitignore license
 
-# create dev folder
-
-mkdir ~/dev
-
+# Create dev folder
+mkdir -p ~/dev

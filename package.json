@@ -1,21 +1,17 @@
 {
   "name": "mac-setup",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Mac setup: apps, tools, and settings",
+  "private": true,
   "scripts": {
-    "toc": "doctoc README.md --github"
+    "toc": "doctoc README.md --github",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "CJ R. <cj@null.computer> (https://w3cj.sh)",
   "license": "MIT",
-  "dependencies": {
-    "doctoc": "^1.4.0",
-    "husky": "^4.2.5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run toc && git add README.md"
-    }
+  "devDependencies": {
+    "doctoc": "^2.2.1",
+    "husky": "^9.1.7"
   }
 }

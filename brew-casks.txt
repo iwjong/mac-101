@@ -2,7 +2,7 @@ iterm2
 alfred
 rectangle
 alt-tab
-app-cleaner
+appcleaner
 keepingyouawake
 discord
 vlc
@@ -10,5 +10,13 @@ keka
 kap
 time-out
 visual-studio-code
-firefox developer edition
-brackets
+firefox@developer-edition
+android-file-transfer
+android-platform-tools
+gimp
+inkscape
+sublime-text
+insomnia
+stats
+itsycal
+slack
